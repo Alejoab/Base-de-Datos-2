@@ -1,17 +1,21 @@
 import multichain.command.*;
 import multichain.object.*;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.nio.file.Paths;
 import java.util.*;
-
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 
 public class Multichain {
 	public static String host = "localhost";
-	public static String port = "9716";
+	public static String port = "7732";
 	public static String rpcuser = "multichainrpc";
-	public static String rpcpasswd = "7vacR4shXKKFMYDtQn4BG3Gts28GMepAeMik1LQqCp6f";
-	public static String stream = "Graduandos";
+	public static String rpcpasswd = "Bdh7zA3iSWLtYM8u518PV7nDPLmtFGZ4oxcVNeCmHDSz";
 	
 	public static String insertarGraduando(String pasaporte, String nombre, String apellidos, String fecha_de_nacimiento, String celular) {
 		CommandManager commandManager = new CommandManager(host, port, rpcuser, rpcpasswd);
@@ -87,7 +91,7 @@ public class Multichain {
 	
 	
 	
-	public static List<StreamKeyItem> listarCertificados(String pasaporte, String programa) {
+	public static List<StreamKeyItem> listarCertificados(String pasaporte, String programa, String ruta) {
 		CommandManager commandManager = new CommandManager(host, port, rpcuser, rpcpasswd);
 
 		List<StreamKeyItem> items;
@@ -107,7 +111,6 @@ public class Multichain {
 				}
 			} else {
 				for (StreamKeyItem item : items) {
-					System.out.println(item);
 					if (item.getKeys().get(0).equals(pasaporte) || item.getKeys().get(1).equals(programa)) {
 						
 						returnItems.add(item);
@@ -117,6 +120,26 @@ public class Multichain {
 			
 		} catch (MultichainException e) {
 			e.getMessage();
+		}
+		int index = 0;
+		for (StreamKeyItem item : returnItems) {
+			JsonData jsonObject = new Gson().fromJson(item.getData().toString(), JsonData.class);
+			Certificado certificado = new Gson().fromJson(jsonObject.json, Certificado.class);
+			
+			byte[] decoded = java.util.Base64.getDecoder().decode(certificado.diploma);
+			FileOutputStream fos;
+			
+			String path = ruta+"\\"+item.getKeys().get(0)+"_"+item.getKeys().get(1)+"_"+index+".pdf";
+			
+			try {
+				fos = new FileOutputStream(path);
+				fos.write(decoded);
+				fos.flush();
+				fos.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			index++;
 		}
 		
 		return returnItems;

@@ -21,6 +21,7 @@ public class BuscarCertificados extends JPanel {
 
 	private JTextField textPasaporte;
 	private JTextField textPrograma;
+	private JTextField textPath;
 	private JTextArea textOutput;
 	
 	
@@ -32,9 +33,9 @@ public class BuscarCertificados extends JPanel {
 		add(data);
 		GridBagLayout gbl_data = new GridBagLayout();
 		gbl_data.columnWidths = new int[]{166, 255};
-		gbl_data.rowHeights = new int[]{0, 0, 37};
+		gbl_data.rowHeights = new int[]{0, 0, 0, 37};
 		gbl_data.columnWeights = new double[]{0.0, 0.0};
-		gbl_data.rowWeights = new double[]{0.0, 0.0, 0.0};
+		gbl_data.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0};
 		data.setLayout(gbl_data);
 		
 		JLabel labelPasaporte = new JLabel("Pasaporte");
@@ -69,19 +70,37 @@ public class BuscarCertificados extends JPanel {
 		data.add(textPrograma, gbc_textPrograma);
 		textPrograma.setColumns(10);
 		
+		JLabel labelRuta = new JLabel("Ruta de descarga");
+		GridBagConstraints gbc_labelRuta = new GridBagConstraints();
+		gbc_labelRuta.insets = new Insets(0, 0, 5, 5);
+		gbc_labelRuta.gridx = 0;
+		gbc_labelRuta.gridy = 2;
+		data.add(labelRuta, gbc_labelRuta);
+		
+		textPath = new JTextField();
+		GridBagConstraints gbc_textRuta = new GridBagConstraints();
+		gbc_textRuta.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textRuta.insets = new Insets(0, 0, 5, 0);
+		gbc_textRuta.gridx = 1;
+		gbc_textRuta.gridy = 2;
+		data.add(textPath, gbc_textRuta);
+		textPath.setColumns(10);
+		
 		JButton btnPublicar = new JButton("Buscar");
 		btnPublicar.setBackground(new Color(255, 255, 255));
 		btnPublicar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				List<StreamKeyItem> lista = Multichain.listarCertificados(textPasaporte.getText(), textPrograma.getText());
+				List<StreamKeyItem> lista = Multichain.listarCertificados(textPasaporte.getText(), textPrograma.getText(), textPath.getText());
 				textOutput.setText(lista.toString());
 			}
 		});
+		
 		GridBagConstraints gbc_btnPublicar = new GridBagConstraints();
 		gbc_btnPublicar.anchor = GridBagConstraints.SOUTH;
 		gbc_btnPublicar.gridx = 1;
-		gbc_btnPublicar.gridy = 2;
+		gbc_btnPublicar.gridy = 3;
 		data.add(btnPublicar, gbc_btnPublicar);
+
 		
 		JPanel output = new JPanel();
 		add(output);
