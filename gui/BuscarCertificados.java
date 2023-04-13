@@ -90,8 +90,12 @@ public class BuscarCertificados extends JPanel {
 		btnPublicar.setBackground(new Color(255, 255, 255));
 		btnPublicar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				List<StreamKeyItem> lista = Multichain.listarCertificados(textPasaporte.getText(), textPrograma.getText(), textPath.getText());
-				textOutput.setText(lista.toString());
+				if (textPath.getText().equals("")) {
+					textOutput.setText("Por favor ingresa una ruta valida");
+				} else {
+					List<StreamKeyItem> lista = Multichain.listarCertificados(textPasaporte.getText(), textPrograma.getText(), textPath.getText());
+					textOutput.setText(lista.toString());
+				}
 			}
 		});
 		

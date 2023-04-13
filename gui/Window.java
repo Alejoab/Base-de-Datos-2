@@ -19,7 +19,7 @@ public class Window extends JFrame {
 	    JMenuBar menuBar = new JMenuBar();
 	    frame.setJMenuBar(menuBar);
 	    
-	    JButton boton_graduandos = new JButton("Insertar Graduando");
+	    JButton boton_graduandos = new JButton("Registro de Graduando");
 	    boton_graduandos.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
 	            JPanel nueva_ventana = new Graduandos();
@@ -32,7 +32,7 @@ public class Window extends JFrame {
 	    });
         
         
-	    JButton boton_certificados = new JButton("Insertar Certificado");
+	    JButton boton_certificados = new JButton("Subir Certificado");
 	    boton_certificados.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
 	            JPanel nueva_ventana = new Certificados();
@@ -44,7 +44,7 @@ public class Window extends JFrame {
 	        }
 	    });
 	    
-	    JButton boton_buscar_certificados = new JButton("Buscar Certificado");
+	    JButton boton_buscar_certificados = new JButton("Ver Certificados");
 	    boton_buscar_certificados.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
 	            JPanel nueva_ventana = new BuscarCertificados();

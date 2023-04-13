@@ -3,6 +3,7 @@ import multichain.object.*;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.*;
 import com.google.gson.Gson;
@@ -13,9 +14,9 @@ import com.google.gson.JsonParser;
 
 public class Multichain {
 	public static String host = "localhost";
-	public static String port = "7732";
+	public static String port = "6762";
 	public static String rpcuser = "multichainrpc";
-	public static String rpcpasswd = "Bdh7zA3iSWLtYM8u518PV7nDPLmtFGZ4oxcVNeCmHDSz";
+	public static String rpcpasswd = "5Vdi7mhPQUpa761DAE2zbwATV8VHef3Yi5KbgpumEPtY";
 	
 	public static String insertarGraduando(String pasaporte, String nombre, String apellidos, String fecha_de_nacimiento, String celular) {
 		CommandManager commandManager = new CommandManager(host, port, rpcuser, rpcpasswd);
@@ -23,6 +24,7 @@ public class Multichain {
 		
 		try {
 			commandManager.invoke(CommandElt.SUBSCRIBE, "Graduandos");
+			commandManager.invoke(CommandElt.SETRUNTIMEPARAM, "maxshowndata",131072);
 			items = (List<StreamKeyItem>) commandManager.invoke(CommandElt.LISTSTREAMITEMS, "Graduandos");
 			
 			for (StreamKeyItem item : items) {
@@ -39,6 +41,7 @@ public class Multichain {
 		try {
 			Graduando elemento = new Graduando(nombre, apellidos, fecha_de_nacimiento, celular);
 			JsonData datos = new JsonData(elemento.toJson());
+			commandManager.invoke(CommandElt.SETRUNTIMEPARAM, "maxshowndata",131072);
 			commandManager.invoke(CommandElt.PUBLISH, "Graduandos", pasaporte, datos);
 			
 		} catch (MultichainException e) {
@@ -55,6 +58,7 @@ public class Multichain {
 		
 		try {
 			commandManager.invoke(CommandElt.SUBSCRIBE, "Graduandos");
+			commandManager.invoke(CommandElt.SETRUNTIMEPARAM, "maxshowndata",131072);
 			items = (List<StreamKeyItem>) commandManager.invoke(CommandElt.LISTSTREAMITEMS, "Graduandos");
 			
 			boolean existe = false;
@@ -79,11 +83,14 @@ public class Multichain {
 			Certificado elemento = new Certificado(fecha_de_expedicion, path_diploma);
 			JsonData datos = new JsonData(elemento.toJson());
 			String[] keys = {pasaporte, programa};
+			commandManager.invoke(CommandElt.SETRUNTIMEPARAM, "maxshowndata",131072);
 			commandManager.invoke(CommandElt.PUBLISH, "Certificados", keys , datos);
-
 			
-		} catch (Exception e) {
+		} catch(MultichainException e) {
 			return e.getMessage();
+					
+		} catch(IOException e) {
+			return "Por favor ingresa una ruta válida";
 		}
 		
 		return "Elemento publicado correctamente";
@@ -99,6 +106,7 @@ public class Multichain {
 
 		try {
 			commandManager.invoke(CommandElt.SUBSCRIBE, "Certificados");
+			commandManager.invoke(CommandElt.SETRUNTIMEPARAM, "maxshowndata",131072);
 			items = (List<StreamKeyItem>) commandManager.invoke(CommandElt.LISTSTREAMITEMS, "Certificados");
 			
 			
@@ -112,7 +120,6 @@ public class Multichain {
 			} else {
 				for (StreamKeyItem item : items) {
 					if (item.getKeys().get(0).equals(pasaporte) || item.getKeys().get(1).equals(programa)) {
-						
 						returnItems.add(item);
 					}
 				}
