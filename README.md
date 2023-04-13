@@ -11,4 +11,4 @@ Para ejecutar el código es necesario:
   3. Click en "Java Build Path".
   4. Editar la ubicación del archivo "MultiChainJavaAPI-2.0.2-SNAPSHOT-jar-with-dependencies.jar" a la dirección en la cual clonamos el repositorio localmente.
   
-El proyecto usa como libreria externa
+El proyecto usa como libreria para la GUI swing pero no es necesaria ninguna instalación adicional.
